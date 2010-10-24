@@ -10,6 +10,7 @@
     position: absolute;
     width: 722px;
     height: 300px;
+    background: #000;
     clip: rect(0px, 722px, 300px, 0px);
 }
 
@@ -26,6 +27,7 @@
 }
 
 #slideshow .tabs > div {
+    cursor: pointer;
     width: 24px;
     height: 25px;
     text-align: right;
@@ -46,17 +48,28 @@
 }
 
 #slideshow .tabs > div.top_taper {
-    height: 32px;
+    cursor: auto;
+    height: 25px;
     background: url(images/tabs_sprite.png) no-repeat;
 }
 
 #slideshow .tabs > div.bottom_taper {
+    cursor: auto;
     height: 32px;
     background: url(images/tabs_sprite.png) no-repeat 0px -128px;
 }
 
 #slideshow .flyout {
+    cursor: pointer;
     z-index: 200;
+    width: 144px;
+    height: 190px;
+    position: absolute;
+    padding: 24px 40px 18px 26px;
+    background-color: #1A303A;
+    border: 1px solid white;
+    top: 18px;
+    right: -240px;
 }
 
 #slideshow .footer {

@@ -14,18 +14,16 @@ body > *:first-child {
     background: #ccc;
 }
 
-#bg_1 { background: no-repeat url(images/pic1.jpg)  }
-#bg_2 { background: no-repeat url(images/pic2.jpg) }
-#bg_3 { background: no-repeat url(images/pic3.jpg) }
-#bg_4 { background: no-repeat url(images/pic4.jpg) }
-#bg_5 { background: no-repeat url(images/pic5.jpg) }
-#bg_6 { background: no-repeat url(images/pic6.jpg) }
+#bg_1 { background: #000 no-repeat url(images/pic1.jpg) 0 0}
+#bg_2 { background: #000 no-repeat url(images/pic2.jpg) 0 0}
+#bg_3 { background: #000 no-repeat url(images/pic3.jpg) 0 0}
+#bg_4 { background: #000 no-repeat url(images/pic4.jpg) 0 0}
+#bg_5 { background: #000 no-repeat url(images/pic5.jpg) 0 0}
+#bg_6 { background: #000 no-repeat url(images/pic6.jpg) 0 0}
 
 </style>
 
-<script type='text/javascript'>
-    
-</script>
+<script type='text/javascript' src='show.js'></script>
 </head>
 
 <body>
@@ -45,15 +43,15 @@ body > *:first-child {
     <div class='tabs'> 
         <div class='top_taper'></div>
         <div>1</div>
-        <div class='selected'>2</div>
-        <div class='hover'>3</div>
+        <div>2</div>
+        <div>3</div>
         <div>4</div>
         <div>5</div>
         <div>6</div>
         <div class='bottom_taper'></div>
     </div>
     <!-- flyout info -->
-    <div class='flyout'> 
+    <div id='show_flyout' class='flyout'> 
         <div></div> 
         <div></div> 
         <div></div> 
