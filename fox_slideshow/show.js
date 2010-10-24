@@ -27,12 +27,9 @@ var show = {
     },
 
     transition: function() {
-        var bg = this.bgs[this.selected_index],
-            update = function(y) {
-                bg.style.top = y;
-            };
-        kill_animation();
-        animate(-200, 0, update);
+        var bg = this.bgs[this.selected_index];
+        bg.style.top = -200;
+        motion_api.animate(bg, 100, {style: {top:0}});
 
     },
 
@@ -56,11 +53,10 @@ var show = {
     },
 
     flyout: function(ix) {
-        var wrapper = this.flyout_wrapper,
-            update = function(x) { wrapper.style.right = x; };
+        var wrapper = this.flyout_wrapper;
+
         if (ix == null) { //no args, fly in
-            kill_animation();
-            animate(0, -240, update);
+            motion_api.animate(wrapper, 100, {style: {right: 0}}); 
             return;
         }
         
@@ -68,8 +64,7 @@ var show = {
             this.flyout_zindex = (this.flyout_zindex + 1) % 200;
             this.flyouts[ix].style.zIndex = this.flyout_zindex;
 
-            kill_animation();
-            animate(-240, 0, update);
+            motion_api.animate(wrapper, 150, {style: {right: -240}});
         }
     }
 }
@@ -120,38 +115,3 @@ function show_init() {
 
 }
 
-//bare bones animation:
-//we have animate() and kill_animation(), that's it.
-
-var __can_animate = false;
-function animate(from, to, update, callback) {
-	var diff = to - from,
-	    pos = from,
-	    time = window.easeTime || 100,
-	    frameRate = window.easeFrameRate || 10,
-	    numFrames = parseInt(time / frameRate) + 1,
-	    degree_unit = 1 / numFrames,
-	    frame_degree = degree_unit;
-
-    __can_animate = true;
-
-	(function () {
-        if(!__can_animate) {
-            update(to);
-            callback();
-            return;
-        }
-		update(from + diff * (2 * frame_degree / (frame_degree + 1)));
-		frame_degree += degree_unit;
-		if (numFrames--) {
-			setTimeout(arguments.callee, frameRate);
-		} else {
-            if (typeof (callback) == "function") callback();
-            update(to);
-		}
-	})();
-}
-
-function kill_animation() {
-    __can_animate = false;   
-}
