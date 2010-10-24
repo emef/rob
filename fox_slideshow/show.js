@@ -34,21 +34,22 @@ var show = {
     },
 
     hover: function(ix) {
-        var hx = this.hover_index;
+        var hx = this.hover_index,
+            sx = this.selected_index;
 
-        if (hx == this.selected_index) return; // ignore hover on selected tabs!
-
-        if (ix == null) { //no args, remove hover
-            console.log("MOUSEOUT");
+        if (ix == null && ix != sx) { //no args, remove hover
             if (hx > -1 ) {
                 this.tabs[hx].className = "";
-                this.flyout();
+                this.hover_index = -1;
+                //this.flyout();
             }
              return;
         }
 
+        if (ix == sx) return; // ignore hover on selected tabs!
+
         this.tabs[ix].className = "hover";
-        this.flyout(ix);
+        //this.flyout(ix);
         this.hover_index = ix;
     },
 
