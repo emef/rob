@@ -1,0 +1,70 @@
+#slideshow {
+    width: 722px;
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+}
+
+#slideshow .bg {
+    z-index: 100;
+    position: absolute;
+    width: 722px;
+    height: 300px;
+    clip: rect(0px, 722px, 300px, 0px);
+}
+
+#slideshow .bg > div {
+    position: absolute;
+    width: 722px;
+    height: 300px;
+}
+
+#slideshow .tabs {
+    z-index: 300;
+    float: right;
+    position: relative;
+}
+
+#slideshow .tabs > div {
+    width: 24px;
+    height: 25px;
+    text-align: right;
+    padding: 7px 8px 0px 0px;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    background: url(images/tabs_sprite.png) no-repeat 0px -32px;
+}
+
+#slideshow .tabs > div.hover {
+    background: url(images/tabs_sprite.png) no-repeat 0px -96px;
+}
+
+#slideshow .tabs > div.selected {
+    background: url(images/tabs_sprite.png) no-repeat 0px -64px;
+}
+
+#slideshow .tabs > div.top_taper {
+    height: 32px;
+    background: url(images/tabs_sprite.png) no-repeat;
+}
+
+#slideshow .tabs > div.bottom_taper {
+    height: 32px;
+    background: url(images/tabs_sprite.png) no-repeat 0px -128px;
+}
+
+#slideshow .flyout {
+    z-index: 200;
+}
+
+#slideshow .footer {
+    z-index: 400;
+    position: absolute;
+    bottom: 0px;
+    width: 722px;
+    height: 30px;
+    background: #000;
+    opacity: 0.7;
+}
