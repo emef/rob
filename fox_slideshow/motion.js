@@ -30,6 +30,7 @@ var motion_api = {
 	        numFrames = parseInt(ms / frameRate) + 1,
 	        degree_unit = 1 / numFrames,
             frame_degree = degree_unit,
+            animations = this.animations,
 	        animation = {
                 obj: obj,
                 ok: true,
@@ -37,7 +38,7 @@ var motion_api = {
                 update: function(progress) {
                     (function(obj, diffs) {
                         for(var i in diffs) {
-                            if(typeof(diffs[i]) == 'object' && !diffs[i]._dest) {
+                            if(typeof(diffs[i]) == 'object' && (diffs[i]._dest == undefined)) {
                                 arguments.callee(obj[i], diffs[i]);
                             } else {
                                 obj[i] = diffs[i]._origin + progress* diffs[i]._dest + "px";
@@ -49,6 +50,8 @@ var motion_api = {
                     ok = false;
                     if (typeof (callback) == "function") callback();
                     this.update(1);
+                    delete animations[_id];
+                    animations[_id] = null;
                 },
         };
 
@@ -66,8 +69,8 @@ var motion_api = {
                     diffs[i] = {};
                     get_diffs(obj[i], dest_obj[i], diffs[i]);
                 } else {
-                    var origin = get_pixels(obj[i]),
-                        destination = get_pixels(dest_obj[i]);
+                    var origin = get_pixels(obj[i]) || 0,
+                        destination = get_pixels(dest_obj[i]) || 0;
                     diffs[i] = { _origin: origin, _dest: destination - origin };
                 }
             }

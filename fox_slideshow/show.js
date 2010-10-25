@@ -20,9 +20,9 @@ var show = {
             this.tabs[sx].className = "";
         }
         this.tabs[ix].className = "selected";
-        this.bg_zindex = (this.bg_zindex + 1) % 100;
-        this.bgs[ix].style.zIndex = this.bg_zindex;
+        this.to_top(this.bgs, ix, this.bg_zindex, sx);
         this.selected_index = ix;
+        this.hover_index = -1;
         this.transition();
     },
 
@@ -33,45 +33,54 @@ var show = {
 
     },
 
-    hover: function(ix) {
+// THIS IS BROKEN!!!
+    tab_hover: function(ix) {
         var hx = this.hover_index,
             sx = this.selected_index;
 
-        if (ix == null && ix != sx) { //no args, remove hover
-            if (hx > -1 ) {
-                this.tabs[hx].className = "";
-                this.hover_index = -1;
-                //this.flyout();
-            }
-             return;
-        }
 
         if (ix == sx) return; // ignore hover on selected tabs!
-
-        this.tabs[ix].className = "hover";
-        //this.flyout(ix);
-        this.hover_index = ix;
+        if (hx > -1 ) {
+            this.tabs[hx].className = "";
+            this.hover_index = -1;
+        }
+        if (ix) {
+            this.tabs[ix].className = "hover";
+            this.hover_index = ix;
+        }
     },
 
-    flyout: function(ix) {
+    fly_out: function(ix) {
         var wrapper = this.flyout_wrapper;
 
-        if (ix == null) { //no args, fly in
-            motion_api.animate(wrapper, 100, {style: {right: 0}}); 
-            return;
+        if (ix > 0) {
+            this.to_top(this.flyouts, this.hover_index, this.flyout_zindex);
+            motion_api.animate(wrapper, 150, {style: {right: 0}});
         }
-        
-        if (ix != this.selected_index) {
-            this.flyout_zindex = (this.flyout_zindex + 1) % 200;
-            this.flyouts[ix].style.zIndex = this.flyout_zindex;
+    },
 
-            motion_api.animate(wrapper, 150, {style: {right: -240}});
+    fly_in: function() {
+        console.log("flyin");
+        var wrapper = this.flyout_wrapper;
+        motion_api.animate(wrapper, 150, {style: {right: -240}});
+    },
+
+    to_top: function(arr, ix, base, lx) {
+        for(var i=0, j=arr.length; i<j; i++) {
+            if(i==ix) {
+                arr[i].style.zIndex = base + 2;
+            } else if(i==lx) {
+                arr[i].style.zIndex = base + 1;
+            } else {
+                arr[i].style.zIndex = base;
+            }
         }
     }
 }
 
 function show_init() {
     var root = document.getElementById("slideshow"),
+        tabs,
         child;
 
     //
@@ -81,19 +90,26 @@ function show_init() {
     child = root.children[0]; //div.bgs
     show.bgs = child.children; //all child divs
 
-    child = root.children[1]; //div.tabs
+    tabs = root.children[1]; //div.tabs
     //add all but first and last child
-    for(var i=1, j=child.children.length-1; i<j; i++) {
-        show.tabs.push(child.children[i]);
+    for(var i=1, j=tabs.children.length-1; i<j; i++) {
+        show.tabs.push(tabs.children[i]);
     }
 
     child = root.children[2]; //div.flyout
     show.flyout_wrapper = child;
     show.flyouts = child.children; 
+    show.flyout_wrapper.style.right = -240;
     
     //
     //add event listeners
     //
+    var over_tab = false, over_flyout = false, flown = false;
+
+    show.flyout_wrapper.onclick = function() {
+        show.select(show.hover_index);
+    }
+
     for(var i=0, j=show.tabs.length; i<j; i++) {
         show.tabs[i].onclick = (function(ix) {
             return function() {
@@ -103,12 +119,12 @@ function show_init() {
 
         show.tabs[i].onmouseover = (function(ix) {
             return function() {
-                show.hover(ix);
+                show.tab_hover(ix);
             }
         })(i);
 
         show.tabs[i].onmouseout = function() { 
-            show.hover();
+            show.tab_hover();
         }
     }
     
