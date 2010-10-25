@@ -9,7 +9,6 @@ var motion_api = {
     })(),
     
     finish: function(c) {
-        console.log("finishing");
         if (typeof(c) == "object") {
             for(var i=0, j = this.animations.length; i<j; i++) {
                 if (this.animations[i].obj == c) {
@@ -75,25 +74,13 @@ var motion_api = {
                 }
             }
         })(obj, dest_obj, diffs);
-            
-        function update(progress) {
-            (function(obj, diffs) {
-                for(var i in diffs) {
-                    if(typeof(diffs[i]) == 'object' && !diffs[i]._dest) {
-                        arguments.callee(obj[i], diffs[i]);
-                    } else {
-                        obj[i] = diffs[i]._origin + progress* diffs[i]._dest + "px";
-                    }
-                }
-            })(obj, diffs);
-        }
-
+        
         (function () {
             if(!animation.ok) {
                 animation.finish();
                 return;
             }
-            update(2 * frame_degree / (frame_degree + 1));
+            animation.update(2 * frame_degree / (frame_degree + 1));
             frame_degree += degree_unit;
             if (numFrames--) {
                 setTimeout(arguments.callee, frameRate);
