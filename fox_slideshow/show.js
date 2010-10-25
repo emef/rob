@@ -11,18 +11,18 @@ var show = {
     tabs: [], //reference to tab divs
     flyouts: [], //references to flyout divs
     flyout_wrapper: document.getElementById("show_flyout"),
-    bg_zindex: 100,
     flyout_zindex: 200,
+    bg_zindex: 100,
     select: function(ix) {
         var sx = this.selected_index;
         if (sx == ix) return; //this tab is already selected
         if(sx > -1) {
             this.tabs[sx].className = "";
         }
+        this.to_top(this.bgs, ix, this.bg_zindex, sx);
         this.tabs[ix].className = "selected";
-        this.bg_zindex = (this.bg_zindex + 1) % 100;
-        this.bgs[ix].style.zIndex = this.bg_zindex;
         this.selected_index = ix;
+        this.hover_index = -1;
         this.transition();
     },
 
@@ -37,7 +37,8 @@ var show = {
         var hx = this.hover_index,
             sx = this.selected_index;
 
-        if (ix == null && ix != sx) { //no args, remove hover
+        if (ix == sx) return;
+        else if (ix == null) { //no args, remove hover
             if (hx > -1 ) {
                 this.tabs[hx].className = "";
                 this.hover_index = -1;
@@ -45,8 +46,6 @@ var show = {
             }
              return;
         }
-
-        if (ix == sx) return; // ignore hover on selected tabs!
 
         this.tabs[ix].className = "hover";
         //this.flyout(ix);
@@ -62,12 +61,24 @@ var show = {
         }
         
         if (ix != this.selected_index) {
-            this.flyout_zindex = (this.flyout_zindex + 1) % 200;
-            this.flyouts[ix].style.zIndex = this.flyout_zindex;
+            this.to_top(this.flyouts, ix, this.flyout_zindex);
 
             motion_api.animate(wrapper, 150, {style: {right: -240}});
         }
+    },
+    
+    to_top: function(arr, ix, base, last) {
+        for(var i=0, j=arr.length; i<j; i++) {
+            if (i==ix) {
+                arr[i].style.zIndex = base + 2;
+            } else if(i==last) {
+                arr[i].style.zIndex = base + 1;  
+            } else {
+                arr[i].style.zIndex = base;
+            }
+        }
     }
+
 }
 
 function show_init() {
